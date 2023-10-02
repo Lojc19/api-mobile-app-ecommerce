@@ -1,12 +1,7 @@
 const Product = require("../models/product.model");
 const User = require("../models/user.model");
-const Category = require("../models/category.model")
-const Room = require("../models/category.model")
-
 const asyncHandler = require("express-async-handler");
 const productService = require("../services/product.service")
-const categoryService = require("../services/category.service")
-const roomService = require("../services/room.service")
 
 const validateMongoDbId = require("../../utils/validateMongodbId");
 
@@ -44,32 +39,9 @@ const getaProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
   const data = await productService.getaProduct(id);
-  const nameCate = await categoryService.getaCategory(data.category);
-  const nameRoom = await roomService.getaRoom(data.room);
-
   res.json({
     status: "success",
-    data: {
-      code: data?.code,
-      name: data?.name,
-      description: data?.description,
-      shortDescription: data?.shortDescription,
-      images: data?.images,
-      category: {
-        cateId: data?.category,
-        nameCate: nameCate.category
-      },
-      room: {
-        roomId: data?.room,
-        nameRoom: nameRoom.room,
-      },
-      specs: data?.specs,
-      price: data?.price,
-      quantity: data?.quantity,
-      totalrating: data?.totalrating,
-      ratings: data?.ratings,
-      realease_date: data?.realease_date,
-    }
+    data
   })
 });
 

@@ -27,12 +27,14 @@ var productSchema = new mongoose.Schema(
       defaul: [],
     },
     category: {
-      cateID: { type: mongoose.Schema.Types.ObjectId,require:true, ref: "Category"},
-      nameCate: { type: String, require:true, defaul: "abc" }
+      type: mongoose.Schema.Types.ObjectId,
+      require: true, 
+      ref: "Category"
     },
     room: {
-      roomID: { type: mongoose.Schema.Types.ObjectId,require:true, ref: "Room"},
-      nameRoom: {type: String, require: true, defaul: "abc"},
+      type: mongoose.Schema.Types.ObjectId,
+      require: true, 
+      ref: "Room"
     },
     specs: [
       {

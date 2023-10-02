@@ -7,8 +7,8 @@ const jwt = require("jsonwebtoken");
 
 // register User 
 const createRoom = asyncHandler(async (req, res) => {
-  const { room } = req.body;
-  const data = await roomService.createRoom(room)
+  const { nameRoom } = req.body;
+  const data = await roomService.createRoom(nameRoom)
   res.json({
     status:"success",
     data

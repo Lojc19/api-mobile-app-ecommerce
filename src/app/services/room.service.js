@@ -5,14 +5,13 @@ const validateMongoDbId = require("../../utils/validateMongodbId");
 const jwt = require("jsonwebtoken");
 
 // register 
-const createRoom = asyncHandler(async (room) => {
-    const findRoom = await Room.findOne({ room: room });
-    if (!findRoom) {
-      const newRoom = await Category.create({room: room});
-      return newRoom
-    } else {
-      throw new Error("Err");
-    }
+const createRoom = asyncHandler(async (nameRoom) => {
+  try {
+    const newRoom = await Room.create({nameRoom: nameRoom});
+    return newRoom;
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 const getaRoom = asyncHandler(async(id) => {

@@ -5,14 +5,13 @@ const validateMongoDbId = require("../../utils/validateMongodbId");
 const jwt = require("jsonwebtoken");
 
 // register createCate 
-const createCate = asyncHandler(async (category) => {
-    const findCategory = await Category.findOne({ category: category });
-    if (!findCategory) {
-      const newCategory = await Category.create({category: category});
-      return newCategory
-    } else {
-      throw new Error("Err");
-    }
+const createCate = asyncHandler(async (nameCate) => {
+  try {
+    const newCategory = await Category.create({nameCate: nameCate});
+    return newCategory;
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 const getaCategory = asyncHandler(async(id) => {

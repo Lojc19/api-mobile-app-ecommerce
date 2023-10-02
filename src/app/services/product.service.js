@@ -1,34 +1,12 @@
 const Product = require("../models/product.model");
 const User = require("../models/user.model");
-const categoryService = require("../services/category.service")
-const roomService = require("../services/room.service")
-
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../../utils/validateMongodbId");
 
 const createProduct = asyncHandler(async (product) => {
   try {
     const productNew = await Product.create(product);
-    const getCate = await categoryService.getaCategory(productNew.category.cateID);
-    const getRoom = await roomService.getaRoom(productNew.room.roomID);
-
-    const data = await Product.findOneAndUpdate(
-      {_id: productNew._id}, 
-      {
-        category:{
-          cateID: getCate._id,
-          nameCate: getCate.category,
-        },
-        room: {
-          roomID: getRoom._id,
-          nameRoom: getRoom.room,
-        }, 
-      },
-      {
-        new: true,
-      }
-    );
-    return data;
+    return productNew;
   } catch (error) {
     throw new Error(error);
   }
@@ -58,7 +36,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const getaProduct = asyncHandler(async (id) => {
   try {
-    const findProduct = await Product.findById(id);
+    const findProduct = await Product.findById(id).populate("category", "nameCate").populate("room", "nameRoom");
     return findProduct;
   } catch (error) {
     throw new Error(error);
@@ -67,7 +45,7 @@ const getaProduct = asyncHandler(async (id) => {
 
 const getAllProduct = asyncHandler(async () => {
   try {
-    const getAll = Product.find();
+    const getAll = Product.find().populate("category", "nameCate").populate("room", "nameRoom");
     return getAll;
   } catch (error) {
     throw new Error(error);
@@ -76,7 +54,7 @@ const getAllProduct = asyncHandler(async () => {
 
 const getProductCategory = asyncHandler(async (id) => {
   try {
-    const product = await Product.find({category: id})
+    const product = await Product.find({category: id}).populate("category", "nameCate").populate("room", "nameRoom");
     return product;
   } catch (error) {
     throw new Error(error);
@@ -85,7 +63,7 @@ const getProductCategory = asyncHandler(async (id) => {
 
 const getProductRoom = asyncHandler(async (id) => {
   try {
-    const product = await Product.find({room: id})
+    const product = await Product.find({room: id}).populate("category", "nameCate").populate("room", "nameRoom");
     return product;
   } catch (error) {
     throw new Error(error);
