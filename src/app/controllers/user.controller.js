@@ -10,7 +10,6 @@ const jwt = require("jsonwebtoken");
 // register User 
 const createUser = asyncHandler(async (req, res) => {
     const dataReq = req.body;
-
     const data = await userService.createUser(dataReq);
     res.json({
       status: "success",
@@ -21,73 +20,42 @@ const createUser = asyncHandler(async (req, res) => {
 // login with username password
 const loginUserWithUsernamePassword = asyncHandler(async (req,res) => {
     const { username, password } = req.body;
-    const findUser = await User.findOne({username: username});
-
-    if(findUser && (await findUser.isPasswordMatched(password))) {
-        res.json({
-            status: "success",
-            message: "Login",
-            data: {
-              _id: findUser?._id,
-              firstname: findUser?.firstname,
-              lastname: findUser?.lastname,
-              email: findUser?.email,
-              phone: findUser?.phone,
-              token: generateToken(findUser?.username),
-            },
-        });
-    } else {
-        throw new Error("Invalid Credentials");
-    }
+    const data = await userService.loginUserWithUsernamePassword(username, password);
+    res.json({
+      status: "success",
+      data
+    })
 });
 
 
 // get all user
 const getallUser = asyncHandler(async (req, res) => {
-    try {
-      const getUsers = await User.find();
-      res.json(getUsers);
-    } catch (error) {
-      throw new Error(error);
-    }
+  const data = await userService.getallUser();
+  res.json({
+    status: "success",
+    data,
+  })
 });
 
 // get info 1 user 
 const getaUser = asyncHandler(async (req, res) => {
     const { _id } = req.user;
-
-    try {
-      const getaUser = await User.findById(_id);
-      res.json({
-        getaUser,
-      });
-    } catch (error) {
-      throw new Error(error);
-    }
+    const data = await userService.getaUser(_id);
+    res.json({
+      status: "success",
+      data,
+    });
 });
 
 
 // update user
 const updatedUser = asyncHandler(async (req, res) => {
-    const { _id } = req.user;
-    validateMongoDbId(_id);
-    try {
-      const updatedUser = await User.findByIdAndUpdate(
-        _id,
-        {
-          firstname: req?.body?.firstname,
-          lastname: req?.body?.lastname,
-          email: req?.body?.email,
-          phone: req?.body?.phone,
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(updatedUser);
-    } catch (error) {
-      throw new Error(error);
-    }
+  const { _id }= req.user;
+  const data = await userService.updatedUser(_id,req.body);
+  res.json({
+    status: "success",
+    data,
+  });
 });
 
 // delete user
