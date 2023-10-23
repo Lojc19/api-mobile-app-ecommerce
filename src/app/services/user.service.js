@@ -7,10 +7,10 @@ const { generateRefreshToken } = require("../../config/refreshtoken");
 const jwt = require('jsonwebtoken');
 
 // register User 
-const createUser = asyncHandler(async (dataReq) => {
-  const findUser = await User.findOne({ username: dataReq.username });
-  const findPhoneUser = await User.findOne({ phoneNumber: dataReq.phoneNumber });
-  const findMailUser = await User.findOne({ email: dataReq.email });
+const createUser = asyncHandler(async (reqBody) => {
+  const findUser = await User.findOne({ username: reqBody.username });
+  const findPhoneUser = await User.findOne({ phoneNumber: reqBody.phoneNumber });
+  const findMailUser = await User.findOne({ email: reqBody.email });
   if(findPhoneUser) {
     throw new Error("Phone number already exists");
   }
@@ -18,7 +18,7 @@ const createUser = asyncHandler(async (dataReq) => {
     throw new Error("Email already Exists");
   }
   if (!findUser) {
-    const newUser = await User.create(dataReq);
+    const newUser = await User.create(reqBody);
     return newUser;
   } else {
     throw new Error("Username already exists");
@@ -31,6 +31,11 @@ const loginUserWithUsernamePassword = asyncHandler(async (username,password) => 
   if(findUser && (await findUser.isPasswordMatched(password))) {
     const data = {
       _id: findUser?._id,
+      firstname: findUser?.firstname,
+      lastname: findUser?.lastname,
+      email: findUser?.email,
+      username: findUser?.username,
+      phone: findUser?.phone,
       token: generateToken(findUser?._id),
     };
     return data
@@ -54,8 +59,15 @@ const getallUser = asyncHandler(async (req, res) => {
 const getaUser = asyncHandler(async (_id) => {
   validateMongoDbId(_id);
   try {
-    const data = await User.findById(_id);
-    return data
+    const findUser = await User.findById(_id,{
+      _id: 1,
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      username: 1,
+      phone: 1,
+    });
+    return findUser
   } catch (error) {
     throw new Error(error);
   }

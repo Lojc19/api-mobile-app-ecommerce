@@ -36,7 +36,15 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const getaProduct = asyncHandler(async (id) => {
   try {
-    const findProduct = await Product.findById(id).populate("category", "nameCate").populate("room", "nameRoom");
+    const findProduct = await Product.findById(id,{
+      ratings: 0,
+      sold: 0,
+      ratings: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      realease_date: 0,
+      __v: 0,
+    }).populate("category", "nameCate").populate("room", "nameRoom");
     return findProduct;
   } catch (error) {
     throw new Error(error);
@@ -45,7 +53,15 @@ const getaProduct = asyncHandler(async (id) => {
 
 const getAllProduct = asyncHandler(async () => {
   try {
-    const getAll = Product.find().populate("category", "nameCate").populate("room", "nameRoom");
+    const getAll = Product.find({},{
+      ratings: 0,
+      sold: 0,
+      ratings: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      realease_date: 0,
+      __v: 0,
+    }).populate("category", "nameCate").populate("room", "nameRoom");
     return getAll;
   } catch (error) {
     throw new Error(error);
@@ -54,8 +70,16 @@ const getAllProduct = asyncHandler(async () => {
 
 const getProductCategory = asyncHandler(async (id) => {
   try {
-    const product = await Product.find({category: id}).populate("category", "nameCate").populate("room", "nameRoom");
-    return product;
+    const products = await Product.find({category: id}, {
+      ratings: 0,
+      sold: 0,
+      ratings: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      realease_date: 0,
+      __v: 0,
+    }).populate("category", "nameCate").populate("room", "nameRoom");
+    return products;
   } catch (error) {
     throw new Error(error);
   }
@@ -63,7 +87,15 @@ const getProductCategory = asyncHandler(async (id) => {
 
 const getProductRoom = asyncHandler(async (id) => {
   try {
-    const product = await Product.find({room: id}).populate("category", "nameCate").populate("room", "nameRoom");
+    const product = await Product.find({room: id},{
+        ratings: 0,
+        sold: 0,
+        ratings: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        realease_date: 0,
+        __v: 0,
+      }).populate("category", "nameCate").populate("room", "nameRoom");
     return product;
   } catch (error) {
     throw new Error(error);

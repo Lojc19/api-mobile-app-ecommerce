@@ -9,8 +9,7 @@ const jwt = require("jsonwebtoken");
 
 // register User 
 const createUser = asyncHandler(async (req, res) => {
-    const dataReq = req.body;
-    const data = await userService.createUser(dataReq);
+    const data = await userService.createUser(req.body);
     res.json({
       status: "success",
       data,
