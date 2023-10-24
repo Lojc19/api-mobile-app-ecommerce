@@ -19,7 +19,15 @@ const createUser = asyncHandler(async (reqBody) => {
   }
   if (!findUser) {
     const newUser = await User.create(reqBody);
-    return newUser;
+    const data = {
+      _id: newUser?._id,
+      firstname: newUser?.firstname,
+      lastname: newUser?.lastname,
+      email: newUser?.email,
+      username: newUser?.username,
+      phone: newUser?.phone,
+    };
+    return data;
   } else {
     throw new Error("Username already exists");
   }

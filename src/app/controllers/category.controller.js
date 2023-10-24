@@ -6,8 +6,7 @@ const jwt = require("jsonwebtoken");
 
 // register cate 
 const createCate = asyncHandler(async (req, res) => {
-    const { nameCate } = req.body;
-    const data = await cateService.createCate(nameCate)
+    const data = await cateService.createCate(req.body)
     res.json({
       status:"success",
       data
@@ -23,4 +22,13 @@ const getaCategory = asyncHandler(async (req, res) => {
   })
 });
 
-module.exports = {createCate, getaCategory};
+const getallCategory = asyncHandler(async (req, res) => {
+  const data = await cateService.getallCategory();
+  res.json({
+    status: "success",
+    data
+  })
+});
+
+
+module.exports = {createCate, getaCategory, getallCategory};

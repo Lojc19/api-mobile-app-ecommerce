@@ -7,8 +7,7 @@ const jwt = require("jsonwebtoken");
 
 // register User 
 const createRoom = asyncHandler(async (req, res) => {
-  const { nameRoom } = req.body;
-  const data = await roomService.createRoom(nameRoom)
+  const data = await roomService.createRoom(req.body)
   res.json({
     status:"success",
     data
@@ -24,4 +23,12 @@ const getaRoom = asyncHandler(async (req, res) => {
   })
 });
 
-module.exports = {createRoom,getaRoom};
+const getallRoom = asyncHandler(async (req, res) => {
+  const data = await roomService.getallRoom();
+  res.json({
+    status: "success",
+    data
+  })
+});
+
+module.exports = {createRoom, getaRoom, getallRoom};

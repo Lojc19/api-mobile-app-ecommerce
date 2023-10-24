@@ -5,9 +5,9 @@ const validateMongoDbId = require("../../utils/validateMongodbId");
 const jwt = require("jsonwebtoken");
 
 // register createCate 
-const createCate = asyncHandler(async (nameCate) => {
+const createCate = asyncHandler(async (reqBody) => {
   try {
-    const newCategory = await Category.create({nameCate: nameCate});
+    const newCategory = await Category.create(reqBody);
     return newCategory;
   } catch (error) {
     throw new Error(error);
@@ -15,8 +15,29 @@ const createCate = asyncHandler(async (nameCate) => {
 });
 
 const getaCategory = asyncHandler(async(id) => {
-  const cate = await Category.findById(id);
-  return cate; 
+  try {
+    const cate = await Category.findById(id, {
+      _id: 1,
+      nameCate: 1,
+      icUrl: 1,
+    });
+    return cate; 
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
-module.exports = { createCate, getaCategory };
+const getallCategory = asyncHandler(async() => {
+  try {
+    const data = await Category.find({},{
+      _id: 1,
+      nameCate: 1,
+      icUrl: 1,
+    });
+    return data; 
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = { createCate, getaCategory, getallCategory };

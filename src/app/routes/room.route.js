@@ -1,5 +1,5 @@
 const express = require("express");
-const { createRoom, getaRoom} = require("../controllers/room.controller");
+const { createRoom, getaRoom, getallRoom} = require("../controllers/room.controller");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware"); 
 const router = express.Router();
 
@@ -7,5 +7,7 @@ const router = express.Router();
 router.post("/create-room",authMiddleware, isAdmin, createRoom);
 
 router.get("/getaRoom/:id", getaRoom);
+
+router.get("/getallRoom", getallRoom);
 
 module.exports = router;

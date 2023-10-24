@@ -5,9 +5,9 @@ const validateMongoDbId = require("../../utils/validateMongodbId");
 const jwt = require("jsonwebtoken");
 
 // register 
-const createRoom = asyncHandler(async (nameRoom) => {
+const createRoom = asyncHandler(async (reqBody) => {
   try {
-    const newRoom = await Room.create({nameRoom: nameRoom});
+    const newRoom = await Room.create(reqBody);
     return newRoom;
   } catch (error) {
     throw new Error(error);
@@ -19,4 +19,17 @@ const getaRoom = asyncHandler(async(id) => {
   return room; 
 });
 
-module.exports = { createRoom, getaRoom };
+const getallRoom = asyncHandler(async() => {
+  try {
+    const data = await Room.find({},{
+      _id: 1,
+      nameRoom: 1,
+      icUrl: 1,
+    });
+    return data; 
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = { createRoom, getaRoom, getallRoom };
