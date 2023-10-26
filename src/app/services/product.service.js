@@ -44,7 +44,7 @@ const getaProduct = asyncHandler(async (id) => {
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate").populate("room", "nameRoom");
+    }).populate("category", "nameCate icUrl").populate("room", "nameRoom icUrl");
     return findProduct;
   } catch (error) {
     throw new Error(error);
@@ -61,7 +61,7 @@ const getAllProduct = asyncHandler(async () => {
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate").populate("room", "nameRoom");
+    }).populate("category", "nameCate icUrl").populate("room", "nameRoom icUrl");
     return getAll;
   } catch (error) {
     throw new Error(error);
@@ -78,7 +78,7 @@ const getProductCategory = asyncHandler(async (id) => {
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate").populate("room", "nameRoom");
+    }).populate("category", "nameCate icUrl").populate("room", "nameRoom icUrl");
     return products;
   } catch (error) {
     throw new Error(error);
@@ -95,7 +95,7 @@ const getProductRoom = asyncHandler(async (id) => {
         updatedAt: 0,
         realease_date: 0,
         __v: 0,
-      }).populate("category", "nameCate").populate("room", "nameRoom");
+      }).populate("category", "nameCate icUrl").populate("room", "nameRoom icUrl");
     return product;
   } catch (error) {
     throw new Error(error);
