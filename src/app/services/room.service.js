@@ -1,4 +1,5 @@
 const Room = require("../models/room.model");
+const Category = require("../models/category.model");
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require("../../utils/validateMongodbId");
 
@@ -15,8 +16,18 @@ const createRoom = asyncHandler(async (reqBody) => {
 });
 
 const getaRoom = asyncHandler(async(id) => {
-  const room = await Room.findById(id);
-  return room; 
+  const room = await Room.findById(id,{
+    createdAt: 0,
+    updatedAt: 0,
+    __v: 0,
+  });
+  const category = await Category.find({roomId: room._id},{
+    createdAt: 0,
+    updatedAt: 0,
+    __v: 0,
+    roomId: 0,
+  });
+  return category; 
 });
 
 const getallRoom = asyncHandler(async() => {

@@ -6,6 +6,9 @@ var categorySchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    roomId: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Room',
+    },
     icUrl: {
         type: String,
         required: true,
