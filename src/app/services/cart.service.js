@@ -65,4 +65,121 @@ const getCart = asyncHandler(async (req) => {
     }
 });
 
-module.exports = {addtoCart, getCart };
+const emptyCart = asyncHandler(async (req) => {
+    const { _id } = req.user;
+    try {
+      const findCart = await Cart.findOne({userId: _id});
+      if(findCart)
+      {
+        const data = await Cart.findOneAndRemove({ userId: _id });
+        return data
+      }
+    } catch (error) {
+      throw new Error(error);
+  }
+});
+
+const updateCart = asyncHandler(async (req) => {
+  const { update, productId } = req.body;
+  const userId = req.user._id; //TODO: the logged in user id
+  try {
+    let cart = await Cart.findOne({ userId });
+    let getProduct = await Product.findById(productId)
+
+    if (cart) {
+      let itemIndex = cart.products.findIndex(p => p.productId == productId);
+      if(itemIndex > -1)
+      {
+        if(update == "delete")
+        {
+          cart.cartTotal = cart.cartTotal - cart.products[itemIndex].totalPriceItem;
+          cart.products.splice(itemIndex,1);
+          // cart = await cart.save();
+          if(cart.products.length == 0)
+          {
+            await Cart.findOneAndRemove({ userId });
+          }
+        }
+        
+        if(update == "plus")
+        {
+          if((cart.products[itemIndex].quantity + 1) <= getProduct.quantity)
+          {
+            cart.cartTotal = cart.cartTotal + getProduct.price;
+            cart.products[itemIndex].quantity = cart.products[itemIndex].quantity + 1;
+            cart.products[itemIndex].totalPriceItem = getProduct.price * cart.products[itemIndex].quantity;
+            // cart = await cart.save();
+          }
+          else {
+            throw new Error("Số lượng không khả dụng")
+          }
+        }
+
+        if(update == "minus")
+        {
+          if((cart.products[itemIndex].quantity - 1) > 0)
+          {
+            cart.cartTotal = cart.cartTotal + getProduct.price;
+            cart.products[itemIndex].quantity = cart.products[itemIndex].quantity - 1;
+            cart.products[itemIndex].totalPriceItem = getProduct.price * cart.products[itemIndex].quantity;
+            cart = await cart.save();
+          }
+          else {
+            cart.cartTotal = cart.cartTotal - cart.products[itemIndex].totalPriceItem;
+            cart.products.splice(itemIndex,1);
+            // cart = await cart.save();
+            if(cart.products.length == 0)
+            {
+              await Cart.findOneAndRemove({ userId });
+            }
+          }
+        }
+
+        cart = await cart.save();
+        const getCart = await Cart.findOne({ userId }).populate({path: "products.productId", select:'name shortDescription images price'});
+        return getCart;
+      }
+      else {
+        throw new Error("Không tìm thấy sản phẩm trong giỏ hàng")
+      }
+    }
+    else {
+      throw new Error("Cart null");
+    }
+  } catch (err) {
+      throw new Error(err);
+  }
+});
+
+const removeProductInCart = asyncHandler(async (req) => {
+    const { productId } = req.body;
+    const userId = req.user._id; //TODO: the logged in user id
+    try {
+      let cart = await Cart.findOne({ userId });
+      if (cart) {
+        let itemIndex = cart.products.findIndex(p => p.productId == productId);
+        if(itemIndex > -1)
+        {
+          cart.cartTotal = cart.cartTotal - cart.products[itemIndex].totalPriceItem;
+          cart.products.splice(itemIndex,1);
+          cart = await cart.save();
+          if(cart.products.length == 0)
+          {
+            await Cart.findOneAndRemove({ userId });
+          }
+          const getCart = await Cart.findOne({ userId }).populate({path: "products.productId", select:'name shortDescription images price'});
+          return getCart;
+        }
+        else {
+          throw new Error("fail")
+        }
+      }
+      else {
+        throw new Error("fail");
+      }
+    } catch (err) {
+        throw new Error(err);
+    }
+});
+
+module.exports = {addtoCart, getCart, emptyCart, updateCart, removeProductInCart};

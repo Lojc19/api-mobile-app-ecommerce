@@ -7,7 +7,6 @@ const addtoCart = asyncHandler(async (req, res) => {
     const data = await cartService.addtoCart(req);
     res.json({
         status: "success",
-        data,
     })
 });
 
@@ -19,4 +18,20 @@ const getCart = asyncHandler(async (req, res) => {
     })
 });
 
-module.exports = {addtoCart, getCart};
+const emptyCart = asyncHandler(async (req, res) => {
+    const data = await cartService.emptyCart(req);
+    res.json({
+        status: "success",
+    })
+});
+
+const updateCart = asyncHandler(async (req, res) => {
+    const data = await cartService.updateCart(req);
+    res.json({
+        status: "success",
+        data,
+    })
+});
+
+
+module.exports = {addtoCart, getCart, emptyCart, updateCart};
