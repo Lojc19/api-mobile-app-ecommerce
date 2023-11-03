@@ -17,17 +17,16 @@ const createRoom = asyncHandler(async (reqBody) => {
 
 const getaRoom = asyncHandler(async(id) => {
   const room = await Room.findById(id,{
-    createdAt: 0,
-    updatedAt: 0,
-    __v: 0,
-  });
-  const category = await Category.find({roomId: room._id},{
-    createdAt: 0,
-    updatedAt: 0,
-    __v: 0,
-    roomId: 0,
-  });
-  return category; 
+    nameRoom: 1,
+    _id: 0,
+  }).populate("categories", "nameCate icUrl");
+  // const category = await Category.find({roomId: room._id},{
+  //   createdAt: 0,
+  //   updatedAt: 0,
+  //   __v: 0,
+  //   roomId: 0,
+  // });
+  return room; 
 });
 
 const getallRoom = asyncHandler(async() => {

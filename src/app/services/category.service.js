@@ -7,7 +7,11 @@ const jwt = require("jsonwebtoken");
 // register createCate 
 const createCate = asyncHandler(async (reqBody) => {
   try {
-    const newCategory = await Category.create(reqBody);
+    const newCategory = await Category.create(
+      {
+        nameCate: reqBody.nameCate,
+        icUrl: reqBody.icUrl
+      });
     return newCategory;
   } catch (error) {
     throw new Error(error);

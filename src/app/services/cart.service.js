@@ -58,7 +58,12 @@ const getCart = asyncHandler(async (req) => {
     const { _id } = req.user;
     validateMongoDbId(_id);
     try {
-      const cart = await Cart.findOne({ userId: _id }).populate({path: "products.productId", select:'name shortDescription images price'});
+      const cart = await Cart.findOne({ userId: _id },{
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+        userId: 0,
+      }).populate({path: "products.productId", select:'name shortDescription images price'});
       return cart;
     } catch (error) {
       throw new Error(error);
@@ -136,7 +141,12 @@ const updateCart = asyncHandler(async (req) => {
         }
 
         cart = await cart.save();
-        const getCart = await Cart.findOne({ userId }).populate({path: "products.productId", select:'name shortDescription images price'});
+        const getCart = await Cart.findOne({ userId },{
+          createdAt: 0,
+          updatedAt: 0,
+          __v: 0,
+          userId: 0,
+        }).populate({path: "products.productId", select:'name shortDescription images price'});
         return getCart;
       }
       else {
@@ -151,35 +161,5 @@ const updateCart = asyncHandler(async (req) => {
   }
 });
 
-const removeProductInCart = asyncHandler(async (req) => {
-    const { productId } = req.body;
-    const userId = req.user._id; //TODO: the logged in user id
-    try {
-      let cart = await Cart.findOne({ userId });
-      if (cart) {
-        let itemIndex = cart.products.findIndex(p => p.productId == productId);
-        if(itemIndex > -1)
-        {
-          cart.cartTotal = cart.cartTotal - cart.products[itemIndex].totalPriceItem;
-          cart.products.splice(itemIndex,1);
-          cart = await cart.save();
-          if(cart.products.length == 0)
-          {
-            await Cart.findOneAndRemove({ userId });
-          }
-          const getCart = await Cart.findOne({ userId }).populate({path: "products.productId", select:'name shortDescription images price'});
-          return getCart;
-        }
-        else {
-          throw new Error("fail")
-        }
-      }
-      else {
-        throw new Error("fail");
-      }
-    } catch (err) {
-        throw new Error(err);
-    }
-});
 
-module.exports = {addtoCart, getCart, emptyCart, updateCart, removeProductInCart};
+module.exports = {addtoCart, getCart, emptyCart, updateCart};
