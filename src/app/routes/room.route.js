@@ -6,7 +6,7 @@ const router = express.Router();
 // create
 router.post("/create-room",authMiddleware, isAdmin, createRoom);
 
-router.get("/getaRoom/:id", getaRoom);
+router.get("/getCateByRoom/:id", getaRoom);
 
 router.get("/getallRoom", getallRoom);
 
