@@ -20,6 +20,7 @@ const getaRoom = asyncHandler(async(id) => {
     nameRoom: 1,
     _id: 0,
   }).populate("categories", "nameCate icUrl");
+  console.log(room)
   // const category = await Category.find({roomId: room._id},{
   //   createdAt: 0,
   //   updatedAt: 0,

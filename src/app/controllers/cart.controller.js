@@ -33,5 +33,4 @@ const updateCart = asyncHandler(async (req, res) => {
     })
 });
 
-
 module.exports = {addtoCart, getCart, emptyCart, updateCart};

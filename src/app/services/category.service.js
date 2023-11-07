@@ -1,4 +1,5 @@
 const Category = require("../models/category.model");
+const Room = require("../models/room.model");
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require("../../utils/validateMongodbId");
 
@@ -12,6 +13,9 @@ const createCate = asyncHandler(async (reqBody) => {
         nameCate: reqBody.nameCate,
         icUrl: reqBody.icUrl
       });
+    const findRoom = await Room.findById(reqBody.roomId);
+    findRoom.categories.push(newCategory._id);
+    findRoom.save();
     return newCategory;
   } catch (error) {
     throw new Error(error);

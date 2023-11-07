@@ -18,7 +18,7 @@ const addtoCart = asyncHandler(async (req) => {
       
       if (cart) {
         //cart exists for user
-        let itemIndex = cart.products.findIndex(p => p.productId == productId);
+        let itemIndex = cart.products.findIndex(p => p.product == productId);
   
         if (itemIndex > -1) {
           //product exists in the cart, update the quantity
@@ -29,7 +29,7 @@ const addtoCart = asyncHandler(async (req) => {
         } else {
             totalPriceItem = product.price * quantity;
             //product does not exists in cart, add new item
-            cart.products.push({ productId, quantity, totalPriceItem});
+            cart.products.push({ product, quantity, totalPriceItem});
         }
         let cartTotal = 0;
         for (let i = 0; i < cart.products.length; i++) {
@@ -44,7 +44,7 @@ const addtoCart = asyncHandler(async (req) => {
         //no cart for user, create new cart
         const newCart = await Cart.create({
           userId,
-          products: [{ productId, quantity, totalPriceItem}],
+          products: [{ product, quantity, totalPriceItem}],
           cartTotal,
         });
         return newCart;
@@ -63,7 +63,7 @@ const getCart = asyncHandler(async (req) => {
         updatedAt: 0,
         __v: 0,
         userId: 0,
-      }).populate({path: "products.productId", select:'name shortDescription images price'});
+      }).populate({path: "products.product", select:'name shortDescription images price'});
       return cart;
     } catch (error) {
       throw new Error(error);
@@ -92,7 +92,7 @@ const updateCart = asyncHandler(async (req) => {
     let getProduct = await Product.findById(productId)
 
     if (cart) {
-      let itemIndex = cart.products.findIndex(p => p.productId == productId);
+      let itemIndex = cart.products.findIndex(p => p.product == productId);
       if(itemIndex > -1)
       {
         if(update == "delete")
@@ -103,6 +103,7 @@ const updateCart = asyncHandler(async (req) => {
           if(cart.products.length == 0)
           {
             await Cart.findOneAndRemove({ userId });
+            return null
           }
         }
         
@@ -136,6 +137,7 @@ const updateCart = asyncHandler(async (req) => {
             if(cart.products.length == 0)
             {
               await Cart.findOneAndRemove({ userId });
+              return null
             }
           }
         }
@@ -146,7 +148,7 @@ const updateCart = asyncHandler(async (req) => {
           updatedAt: 0,
           __v: 0,
           userId: 0,
-        }).populate({path: "products.productId", select:'name shortDescription images price'});
+        }).populate({path: "products.product", select:'name shortDescription images price'});
         return getCart;
       }
       else {
