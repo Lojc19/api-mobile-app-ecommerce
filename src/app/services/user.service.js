@@ -34,7 +34,7 @@ const createUser = asyncHandler(async (reqBody) => {
 });
 
 // login with username password
-const loginUserWithUsernamePassword = asyncHandler(async (username,password) => {
+const loginUser = asyncHandler(async (username,password) => {
   const findUser = await User.findOne({username: username});
   if(findUser && (await findUser.isPasswordMatched(password))) {
     const data = {
@@ -119,4 +119,4 @@ const deleteaUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = {createUser, loginUserWithUsernamePassword, getallUser, getaUser, updatedUser, deleteaUser};
+module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser};

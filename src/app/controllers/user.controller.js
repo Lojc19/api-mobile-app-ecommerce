@@ -13,16 +13,18 @@ const createUser = asyncHandler(async (req, res) => {
     res.json({
       status: "success",
       data,
+      message: "Đăng kí thành công"
     });
 });
 
 // login with username password
-const loginUserWithUsernamePassword = asyncHandler(async (req,res) => {
+const loginUser = asyncHandler(async (req,res) => {
     const { username, password } = req.body;
-    const data = await userService.loginUserWithUsernamePassword(username, password);
+    const data = await userService.loginUser(username, password);
     res.json({
       status: "success",
-      data
+      data,
+      message: "Đăng nhập thành công"
     })
 });
 
@@ -33,6 +35,7 @@ const getallUser = asyncHandler(async (req, res) => {
   res.json({
     status: "success",
     data,
+    message: "",
   })
 });
 
@@ -43,6 +46,7 @@ const getaUser = asyncHandler(async (req, res) => {
     res.json({
       status: "success",
       data,
+      message: "",
     });
 });
 
@@ -54,6 +58,7 @@ const updatedUser = asyncHandler(async (req, res) => {
   res.json({
     status: "success",
     data,
+    message: "Cập nhật thông tin thành công",
   });
 });
 
@@ -72,4 +77,4 @@ const deleteaUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = {createUser, loginUserWithUsernamePassword, getallUser, getaUser, updatedUser, deleteaUser};
+module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser};
