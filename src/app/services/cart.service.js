@@ -87,7 +87,7 @@ const emptyCart = asyncHandler(async (req) => {
       if(findCart)
       {
         const data = await Cart.findOneAndDelete({ userId: _id });
-        return
+        return []
       }
     } catch (error) {
       throw new Error(error);
@@ -123,7 +123,7 @@ const updateCart = asyncHandler(async (req) => {
           if(cart.products.length == 0)
           {
             await Cart.findOneAndDelete({ userId });
-            return
+            return []
           }
         }
         else {
