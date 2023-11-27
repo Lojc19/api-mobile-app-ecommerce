@@ -103,7 +103,7 @@ const updateCart = asyncHandler(async (req) => {
           if(cart.products.length == 0)
           {
             await Cart.findOneAndRemove({ userId });
-            return null
+            return
           }
         }
         
@@ -137,7 +137,7 @@ const updateCart = asyncHandler(async (req) => {
             if(cart.products.length == 0)
             {
               await Cart.findOneAndRemove({ userId });
-              return null
+              return
             }
           }
         }
